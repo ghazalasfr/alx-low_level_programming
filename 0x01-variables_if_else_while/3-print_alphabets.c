@@ -1,9 +1,9 @@
 #include <stdio.h>
 
 /**
-  * main - Entry point for this code
+  * main - Entry point of the entire code
   *
-  * Return: 0 since main is void
+  * Return: Always 0 (Success)
   */
 
 int main(void)
@@ -12,10 +12,12 @@ int main(void)
 
 	for (n = 97; n <= 122; n++)
 	{
-		if (n != 113 && n != 101)
-		{
-			putchar(n);
-		}
+		putchar(n);
+	}
+
+	for (n = 65; n <= 90; n++)
+	{
+		putchar(n);
 	}
 
 	putchar('\n');
