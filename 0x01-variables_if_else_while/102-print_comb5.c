@@ -1,11 +1,15 @@
 #include <stdio.h>
+
 /**
   *main - prints two pairs of two-digit numbers
+  *
   *Return: 0
 */
+
 int main(void)
 {
-    int i, j;
+    int i;
+    int j;
 
     for (i = 0; i <= 99; i++)
         {
@@ -25,5 +29,6 @@ int main(void)
             }
         }
             putchar('\n');
+
             return (0);
 }
