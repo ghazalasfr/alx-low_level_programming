@@ -7,7 +7,14 @@
   * Return: The last digit of type int
   */
 
-int print_last_digit(int a)
+int print_last_digit(int n)
 {
-	return (a % 10);
+	int b = n % 10;
+
+	if (b < 0)
+		b *= -1;
+
+	_putchar(b + '0');
+
+	return (b);
 }
