@@ -3,7 +3,7 @@
 
 /**
   * alloc_grid - allocat the grid
-  * @width: with of the grid 
+  * @width: width 
   * @height: height of the grid
   *
   * Return: dimenssion
