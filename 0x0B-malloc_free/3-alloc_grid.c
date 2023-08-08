@@ -2,11 +2,11 @@
 #include <stdlib.h>
 
 /**
-  * alloc_grid - ...
-  * @width: ...
-  * @height: ...
+  * alloc_grid - allocat
+  * @width: width
+  * @height: height
   *
-  * Return: ...
+  * Return: results
   */
 int **alloc_grid(int width, int height)
 {
