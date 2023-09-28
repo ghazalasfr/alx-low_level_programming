@@ -2,24 +2,24 @@
 #include "main.h"
 #include <string.h>
 
-/*
- * binary_to_uint : for convert to int 
- *
- * @b : the nb to convert
- * return : the nb converted
- */
+/**
+  * binary_to_uint - Converts a binary number to an unsigned int
+  * @b: The binary string to converts
+  *
+  * Return: The positive number converted from a binary
+  */
 
-unsigned int binary_to_uint(const char *n){
+unsigned int binary_to_uint(const char *b){
     unsigned int dec =0, temp=0,nb=0;
-    if(n==NULL) 
+    if(b==NULL) 
     return (0);
-    nb=strlen(n);
+    nb=strlen(b);
    while (nb--)
 	{
-		if (n[nb] != 48 && n[nb] != 49)
+		if (b[nb] != 48 && b[nb] != 49)
 			return (0);
 
-		if (n[nb] == 49)
+		if (b[nb] == 49)
 			dec += 1 << temp;
 
 		temp++;
