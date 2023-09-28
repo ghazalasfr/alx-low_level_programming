@@ -9,7 +9,8 @@
   * Return: Nothing
   */
 
-void print_binary(unsigned long int n){
+void print_binary(unsigned long int n)
+{
     if (n==0 ) printf("0");
     while (n) {
     if (n & 1)
@@ -18,6 +19,6 @@ void print_binary(unsigned long int n){
         printf("0");
 
     n >>= 1;
-}
+   }
 
 }
