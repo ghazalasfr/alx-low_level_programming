@@ -1,10 +1,6 @@
-#ifndef _BIT_MANIPULATUIN
-#define _BIT_MANIPULATUIN
+#ifndef BIT_MANIPULATUIN_H
+#define BIT_MANIPULATUIN_H
 
-/* heads
- *
- *
- * */
 
 unsigned int binary_to_uint(const char *b);
 void print_binary(unsigned long int n);
