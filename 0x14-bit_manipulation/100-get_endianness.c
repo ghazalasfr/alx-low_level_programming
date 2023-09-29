@@ -7,7 +7,7 @@
  * Return: 1 for little endian, 0 for big endian.
  */
 
-int get_endianness(void)
+int get_endianness(void) 
 {
     unsigned int num = 1;
 
