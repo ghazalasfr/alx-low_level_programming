@@ -5,15 +5,15 @@
   * @n: The number to find the index
   * @index: The index to find
   *
-  * Return: the value of the bit at index index or -1 
+  * Return: the value of the bit at index index or -1
   */
-int get_bit(unsigned long int n, unsigned int index){
-    unsigned int compteur = 0;
+int get_bit(unsigned long int n, unsigned int index) 
+{
+	unsigned int compteur = 0;
 
-	while (n)
-	{
-		if (compteur == index)
-		{
+	while (n) {
+
+		if (compteur == index) {
 			if (n % 2)
 				return (1);
 			else
@@ -28,6 +28,4 @@ int get_bit(unsigned long int n, unsigned int index){
 		return (0);
 
 	return (-1);
-    
 }
-
