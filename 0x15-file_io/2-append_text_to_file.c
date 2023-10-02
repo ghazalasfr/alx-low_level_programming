@@ -25,13 +25,13 @@ int append_text_to_file(const char *filename, char *text_content)
 	if (fd == -1)
 		return (-1);
 
-	int len = 0;
-	while (text_content[len])
-		len++;
+	int c = 0;
+	while (text_content[c])
+		c++;
 
 	if (text_content)
 	{
-		if (write(fd, text_content, len) == -1)
+		if (write(fd, text_content, c) == -1)
 			return (-1);
 	}
 
