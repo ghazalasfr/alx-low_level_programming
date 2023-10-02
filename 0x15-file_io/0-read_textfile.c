@@ -15,23 +15,23 @@
   */
 ssize_t read_textfile(const char *filename, size_t letters)
 {
-	int fd, readed;
-	char *buff = malloc(sizeof(char *) * letters);
+	int file, readedlettres;
+	char *buffer = malloc(sizeof(char *) * letters);
 
-	if (!buff)
+	if (buffer == 0)
 		return (0);
 
-	if (!filename)
+	if (filename == NULL)
 		return (0);
 
-	fd = open(filename, O_RDONLY, 0600);
-	if (fd == -1)
+	file = open(filename, O_RDONLY, 0600);
+	if (file == -1)
 		return (0);
 
-	readed = read(fd, buff, letters);
-	write(STDOUT_FILENO, buff, readed);
+	readedletters = read(file, buffer, letters);
+	write(STDOUT_FILENO, buffer, readedletters);
 
-	free(buff);
-	close(fd);
-	return (readed);
+	free(buffer);
+	close(file);
+	return (readedletters);
 }
