@@ -2,32 +2,40 @@
 #include <stdlib.h>
 #include "main.h"
 
-/**
-  * read_textfile - ...
-  * @filename: The source file
-  * @letters: Number of letters to reads and prints
-  *
-  * Return: ...
-  */
-ssize_t read_textfile(const char *filename, size_t letters)
-{
-	int fd, readed;
-	char *buff = malloc(sizeof(char *) * letters);
+ssize_t read_textfile(const char *filename, size_t letters) {
+    if (filename == NULL) {
+        return 0;
+    }
 
-	if (!buff)
-		return (0);
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        return 0;
+    }
 
-	if (!filename)
-		return (0);
+    char *buffer = (char *)malloc(letters + 1);
+    if (buffer == NULL) {
+        fclose(file);
+        return 0;
+    }
 
-	fd = open(filename, O_RDONLY, 0600);
-	if (fd == -1)
-		return (0);
+    ssize_t bytesRead = fread(buffer, 1, letters, file);
+    if (bytesRead <= 0) {
+        fclose(file);
+        free(buffer);
+        return 0;
+    }
 
-	readed = read(fd, buff, letters);
-	write(STDOUT_FILENO, buff, readed);
+    buffer[bytesRead] = '\0';
 
-	free(buff);
-	close(fd);
-	return (readed);
+    ssize_t bytesWritten = write(STDOUT_FILENO, buffer, bytesRead);
+    if (bytesWritten != bytesRead) {
+        fclose(file);
+        free(buffer);
+        return 0;
+    }
+
+    fclose(file);
+    free(buffer);
+    
+    return bytesWritten;
 }
