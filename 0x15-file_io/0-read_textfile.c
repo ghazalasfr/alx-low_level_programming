@@ -3,48 +3,29 @@
 #include <stdlib.h>
 
 /**
- * read_textfile : the main function 
- * @filename : the name of the file
- * lettres : nbre of lettres reading
- * return : nbre of lettres 
- * */
+  * read_textfile - ...
+  * @filename: The source file
+  * @letters: Number of letters to reads and prints
+  *
+  * Return: number of lettre
+  */
 
 ssize_t read_textfile(const char *filename, size_t letters) 
 {
-	if (filename == NULL) {
-        return 0;
-	}
+	FILE *file;
+	size_t readlettres;
+	file= open(filename,"r");
+	char *buffer = malloc(sizeof(char *) * letters);
 
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        return 0;
-    }
+	if (filename == NULL)
+		return (0);
+	if (file) 
+		return (0);
 
-    char *buffer = (char *)malloc(letters + 1);
-    if (buffer == NULL) {
-        fclose(file);
-        return 0;
-    }
+	readed = read(file, buffer, letters);
+	write(STDOUT_FILENO, buffer, readlettres);
 
-    ssize_t bytesRead = fread(buffer, sizeof(char), letters, file);
-    if (bytesRead < 0) {
-        fclose(file);
-        free(buffer);
-        return 0;
-    }
-
-    
-    buffer[bytesRead] = '\0';
-
-    ssize_t bytesWritten = printf("%s", buffer);
-    if (bytesWritten != bytesRead) {
-        fclose(file);
-        free(buffer);
-        return 0;
-    }
-
-    fclose(file);
-    free(buffer);
-
-    return bytesRead;
+	free(buffer);
+	close(file);
+	return (readlettres);
 }
