@@ -1,8 +1,9 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include "main.h"
 
 /**
@@ -14,25 +15,24 @@
   */
 int append_text_to_file(const char *filename, char *text_content)
 {
-	int file;
+	int fd;
 
-	if (filename == NULL)
+	if (!filename)
 		return (-1);
 
-	file = open(filename, O_WRONLY | O_APPEND);
-	if (file == -1)
+	fd = open(filename, O_WRONLY | O_APPEND);
+	if (fd == -1)
 		return (-1);
-	
-	int c = 0;
-	while (text_content[c])
-		c++;
+	int len = 0;
+	while (text_content[len])
+		len++;
 
 	if (text_content)
 	{
-		if (write(file, text_content, c) == -1)
+		if (write(fd, text_content, len) == -1)
 			return (-1);
 	}
 
-	close(file);
+	close(fd);
 	return (1);
 }
