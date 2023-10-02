@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "main.h"
 
 /**
@@ -18,6 +22,7 @@ int append_text_to_file(const char *filename, char *text_content)
 	file = open(filename, O_WRONLY | O_APPEND);
 	if (file == -1)
 		return (-1);
+	
 	int c = 0;
 	while (text_content[c])
 		c++;
