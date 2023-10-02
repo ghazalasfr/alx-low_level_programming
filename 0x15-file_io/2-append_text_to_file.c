@@ -16,7 +16,7 @@
   */
 int append_text_to_file(const char *filename, char *text_content)
 {
-	int fd;
+	int fd, c = 0;
 
 	if (!filename)
 		return (-1);
@@ -25,7 +25,7 @@ int append_text_to_file(const char *filename, char *text_content)
 	if (fd == -1)
 		return (-1);
 
-	int c = 0;
+	
 	while (text_content[c])
 		c++;
 
