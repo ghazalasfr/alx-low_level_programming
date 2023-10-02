@@ -1,93 +1,228 @@
+#define _GNU_SOURCE
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <elf.h>
-#include <string.h>
-#include <errno.h>
-
-void print_error(const char* message) {
-    fprintf(stderr, "%s\n", message);
-    exit(98);
+/**
+ * printclass - prints the class from an elf header
+ *
+ * @head: header information
+ *
+ * Return: void
+ */
+void printclass(char *head)
+{
+	printf("  %-35s", "Class:");
+	if (head[4] == 2)
+		printf("ELF64\n");
+	else if (head[4] == 1)
+		printf("ELF32\n");
+	else
+		printf("<unknown: %02hx>", head[4]);
 }
 
-void print_elf_header_info(Elf64_Ehdr *header) {
-    printf("Magic:   ");
-    for (int i = 0; i < EI_NIDENT; i++) {
-        printf("%02x ", header->e_ident[i]);
-    }
-    printf("\n");
-
-    printf("Class:                              %s\n",
-           header->e_ident[EI_CLASS] == ELFCLASS32 ? "ELF32" :
-           (header->e_ident[EI_CLASS] == ELFCLASS64 ? "ELF64" : "Invalid"));
-
-    printf("Data:                               %s\n",
-           header->e_ident[EI_DATA] == ELFDATA2LSB ? "2's complement, little-endian" :
-           (header->e_ident[EI_DATA] == ELFDATA2MSB ? "2's complement, big-endian" : "Invalid"));
-
-    printf("Version:                            %d (current)\n", header->e_ident[EI_VERSION]);
-
-    printf("OS/ABI:                             %s\n",
-           header->e_ident[EI_OSABI] == ELFOSABI_SYSV ? "UNIX - System V" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_HPUX ? "UNIX - HP-UX" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_NETBSD ? "UNIX - NetBSD" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_LINUX ? "UNIX - Linux" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_SOLARIS ? "UNIX - Solaris" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_AIX ? "UNIX - AIX" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_IRIX ? "UNIX - IRIX" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_FREEBSD ? "UNIX - FreeBSD" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_TRU64 ? "UNIX - TRU64" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_MODESTO ? "Novell - Modesto" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_OPENBSD ? "UNIX - OpenBSD" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_ARM_AEABI ? "ARM - EABI" :
-           (header->e_ident[EI_OSABI] == ELFOSABI_ARM ? "ARM - " :
-           (header->e_ident[EI_OSABI] == ELFOSABI_STANDALONE ? "Standalone App" : "Unknown"))))))))))));
-
-    printf("ABI Version:                        %d\n", header->e_ident[EI_ABIVERSION]);
-
-    printf("Type:                               %s\n",
-           header->e_type == ET_NONE ? "No file type" :
-           (header->e_type == ET_REL ? "Relocatable file" :
-           (header->e_type == ET_EXEC ? "Executable file" :
-           (header->e_type == ET_DYN ? "Shared object file" :
-           (header->e_type == ET_CORE ? "Core file" :
-           (header->e_type == ET_LOOS ? "Operating system-specific" :
-           (header->e_type == ET_HIOS ? "Operating system-specific" :
-           (header->e_type == ET_LOPROC ? "Processor-specific" :
-           (header->e_type == ET_HIPROC ? "Processor-specific" : "Unknown"))))))));
-
-    printf("Entry point address:                0x%lx\n", header->e_entry);
+/**
+ * printdata - prints the information about data organization
+ * from the elf header
+ *
+ * @head: header information
+ *
+ * Return: void
+ */
+void printdata(char *head)
+{
+	printf("  %-35s", "Data:");
+	if (head[5] == 1)
+		printf("2's complement, little endian\n");
+	else if (head[5] == 2)
+		printf("2's complement, big endian\n");
+	else
+		printf("<unknown: %02hx>", head[5]);
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        print_error("Usage: elf_header elf_filename");
-    }
+/**
+ * printversion - prints version info from elf header
+ *
+ * @head: header information
+ *
+ * Return: void
+ */
+void printversion(char *head)
+{
+	printf("  %-35s", "Version:");
+	if (head[6] <= EV_CURRENT)
+	{
+		printf("%d", head[6]);
+		if (head[6] == EV_CURRENT)
+			printf(" (current)\n");
+		else
+			printf("\n");
+	}
+	else
+	{
+		printf("49 <unknown %%lx>");
+	}
+}
 
-    const char *filename = argv[1];
+/**
+ * printabi - prints abi version from header information
+ *
+ * @head: header information
+ *
+ * Return: void
+ */
+void printabi(char *head)
+{
+	printf("  %-35s", "OS/ABI:");
+	if (head[7] == 0)
+		printf("UNIX - System V\n");
+	else if (head[7] == 1)
+		printf("UNIX - HP-UX\n");
+	else if (head[7] == 2)
+		printf("UNIX - NetBSD\n");
+	else if (head[7] == 3)
+		printf("UNIX - Linux\n");
+	else if (head[7] == 4)
+		printf("UNIX - GNU Hurd\n");
+	else if (head[7] == 6)
+		printf("UNIX - Solaris\n");
+	else if (head[7] == 7)
+		printf("UNIX - AIX\n");
+	else if (head[7] == 8)
+		printf("UNIX - IRIX\n");
+	else if (head[7] == 9)
+		printf("UNIX - FreeBSD\n");
+	else if (head[7] == 10)
+		printf("UNIX - Tru64\n");
+	else if (head[7] == 11)
+		printf("UNIX - Novell Modesto\n");
+	else if (head[7] == 12)
+		printf("UNIX - OpenBSD\n");
+	else if (head[7] == 13)
+		printf("UNIX - Open VMS\n");
+	else if (head[7] == 14)
+		printf("UNIX - NonStop Kernel\n");
+	else if (head[7] == 15)
+		printf("UNIX - AROS\n");
+	else if (head[7] == 16)
+		printf("UNIX - Fenix OS\n");
+	else if (head[7] == 17)
+		printf("UNIX - CloudABI\n");
+	else
+		printf("<unknown: %02x>\n", head[7]);
+	printf("  %-35s%d\n", "ABI Version:", head[8]);
+}
 
-    int fd = open(filename, O_RDONLY);
-    if (fd == -1) {
-        perror("open");
-        print_error("Failed to open file");
-    }
+/**
+ * printtype - prints elf filetype from header info
+ *
+ * @head: header information
+ *
+ * Return: void
+ */
+void printtype(char *head)
+{
+	int index;
 
-    Elf64_Ehdr header;
-    ssize_t bytes_read = read(fd, &header, sizeof(Elf64_Ehdr));
-    if (bytes_read == -1) {
-        perror("read");
-        print_error("Failed to read file");
-    }
+	if (head[5] == 1)
+		index = 16;
+	else
+		index = 17;
+	printf("  %-35s", "Type:");
+	if (head[index] == 1)
+		printf("REL (Relocatable file)\n");
+	else if (head[index] == 2)
+		printf("EXEC (Executable file)\n");
+	else if (head[index] == 3)
+		printf("DYN (Shared object file)\n");
+	else if (head[index] == 4)
+		printf("CORE (Core file)\n");
+	else
+		printf("<unknown>: %02x%02x\n", head[16], head[17]);
+}
 
-    if (bytes_read != sizeof(Elf64_Ehdr) || memcmp(header.e_ident, ELFMAG, SELFMAG) != 0) {
-        print_error("Not an ELF file");
-    }
+/**
+ * printentry - prints entry address of executable from header
+ *
+ * @head: header information
+ *
+ * Return: void
+ */
+void printentry(char *head)
+{
+	int i, end;
 
-    print_elf_header_info(&header);
+	printf("  %-35s0x", "Entry point address:");
+	if (head[4] == 2)
+		end = 0x1f;
+	else
+		end = 0x1b;
+	if (head[5] == 1)
+	{
+		i = end;
+		while (head[i] == 0 && i > 0x18)
+			i--;
+		printf("%x", head[i--]);
+		while (i >= 0x18)
+			printf("%02x", (unsigned char) head[i--]);
+		printf("\n");
+	}
+	else
+	{
+		i = 0x18;
+		while (head[i] == 0)
+			i++;
+		printf("%x", head[i++]);
+		while (i <= end)
+			printf("%02x", (unsigned char) head[i++]);
+		printf("\n");
+	}
+}
 
-    close(fd);
+/**
+ * main - parses an elf header file
+ *
+ * @ac: number of args
+ * @av: arugment strings
+ *
+ * Return: 0 on success
+ * 1 on incorrect arg number
+ * 2 on file open failure
+ * 3 on read failure
+ * 4 on failure to read enough bytes for a 32 bit file
+ * 98 if elf magic is not matched
+ */
+int main(int ac, char *av[])
+{
+	int ifile, i;
+	char head[32];
 
-    return 0;
+	if (ac != 2)
+		return (1);
+	ifile = open(av[1], O_RDONLY);
+	if (ifile == -1)
+		return (1);
+	i = read(ifile, head, 32);
+	if (i == -1)
+		return (1);
+	if (i < 28)
+		return (1);
+	if (head[0] != 0x7f || head[1] != 'E' || head[2] != 'L' || head[3] != 'F')
+	{
+		dprintf(STDERR_FILENO,
+			"readelf: Error: hellofile: Failed to read file header\n");
+		return (98);
+	}
+	printf("ELF Header:\n  Magic:   ");
+	for (i = 0; i < 16; i++)
+		printf("%02x ", (unsigned int) head[i]);
+	printf("\n");
+	printclass(head);
+	printdata(head);
+	printversion(head);
+	printabi(head);
+	printtype(head);
+	printentry(head);
+	return (0);
 }
 
