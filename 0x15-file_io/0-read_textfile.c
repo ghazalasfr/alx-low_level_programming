@@ -7,25 +7,27 @@
   * @filename: The source file
   * @letters: Number of letters to reads and prints
   *
-  * Return: number of lettre
+  * Return: ...
   */
-
-ssize_t read_textfile(const char *filename, size_t letters) 
+ssize_t read_textfile(const char *filename, size_t letters)
 {
-	FILE *file;
-	size_t readlettres;
-	file= open(filename,"r");
-	char *buffer = malloc(sizeof(char *) * letters);
+	int fd, readed;
+	char *buff = malloc(sizeof(char *) * letters);
 
-	if (filename == NULL)
-		return (0);
-	if (file) 
+	if (!buff)
 		return (0);
 
-	readed = read(file, buffer, letters);
-	write(STDOUT_FILENO, buffer, readlettres);
+	if (!filename)
+		return (0);
 
-	free(buffer);
-	close(file);
-	return (readlettres);
+	fd = open(filename, O_RDONLY, 0600);
+	if (fd == -1)
+		return (0);
+
+	readed = read(fd, buff, letters);
+	write(STDOUT_FILENO, buff, readed);
+
+	free(buff);
+	close(fd);
+	return (readed);
 }
