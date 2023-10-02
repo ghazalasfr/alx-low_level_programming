@@ -15,7 +15,10 @@
   */
 int create_file(const char *filename, char *text_content) 
 {
-	 int fd, c = 0;
+	 int fd;
+	 int length = 0, inlen = 0;
+	
+	 char *ptr;
 
 	if (filename == NULL)
 		return (-1);
@@ -24,12 +27,14 @@ int create_file(const char *filename, char *text_content)
 	if (fd == -1)
 		return (-1);
 
-	while (text_content[c])
-		c++;
-               
-	if (text_content)
-		write(fd, text_content, c);
+	if (text_content != NULL)
+	{
+		for (inlen = 0, ptr = text_content; *ptr; ptr++)
+			inlen++;
+		length = write(file, text_content, inlen);
+	}
 
-	close(fd);
+	if (close(file) == -1 || inlen != length)
+		return (-1);
 	return (1);
 }
