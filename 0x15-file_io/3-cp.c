@@ -1,8 +1,30 @@
-#include <stdio.h>
+#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/uio.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "main.h"
+
+/**
+  * main - Entry point
+  * @argc: The argument count
+  * @argv: The argument vector
+  *
+  * Return: ...
+  */
+int main(int argc, char **argv)
+{
+	if (argc != 3)
+	{
+		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
+		exit(97);
+	}
+
+	copy_file(argv[1], argv[2]);
+	exit(0);
+}
 
 /**
   * copy_file - ...
@@ -50,24 +72,4 @@ void copy_file(const char *src, const char *dest)
 		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", tfd);
 		exit(100);
 	}
-}
-
-/**
-  * main - Entry point
-  * @argc: The first arg
-  * @argv: The second arg
-  *
-  * Return: ...
-  */
-
-int main(int argc, char **argv)
-{
-	if (argc != 3)
-	{
-		dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
-		exit(97);
-	}
-	
-	copy_file(argv[1], argv[2]);
-	exit(0);
 }
