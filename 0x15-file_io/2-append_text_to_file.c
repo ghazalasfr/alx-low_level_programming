@@ -31,7 +31,7 @@ int append_text_to_file(const char *filename, char *text_content)
 		c++;
 	}
 
-	if (text_content) 
+	if (text_content)
 	{
 		if (write(fille, text_content, c) == -1)
 		{
