@@ -24,19 +24,20 @@ int append_text_to_file(const char *filename, char *text_content)
 	fille = open(filename, O_WRONLY | O_APPEND);
 	if (fille == -1)
 		return (-1);
-	if (text_content == NULL)
-	{
-		close(fille);
-		return (1);
-	}
 
-	while (text_content[c])
+	if (text_content != NULL)
+	{
+		while (text_content[c])
 		c++;
+	}
 
 	if (text_content) 
 	{
 		if (write(fille, text_content, c) == -1)
+		{
+			close(fille);
 			return (-1);
+		}
 	}
 
 	close(fille);
