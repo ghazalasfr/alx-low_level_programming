@@ -62,6 +62,7 @@ void copy_file(const char *src, const char *dest)
   *
   * Return: ...
   */
+
 int main(int argc, char **argv) 
 {
 	if (argc != 3)
