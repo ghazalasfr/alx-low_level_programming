@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <elf.h>
 
 
 /**
@@ -248,7 +249,7 @@ int main(int ac, char *av[])
 		return (1);
 	if (head[0] != 0x7f || head[1] != 'E' || head[2] != 'L' || head[3] != 'F')
 	{
-		wprintf(STDERR_FILENO,
+		dprintf(STDERR_FILENO,
 			"readelf: Error: hellofile: Failed to read file header\n");
 		return (98);
 	}
