@@ -1,4 +1,4 @@
-#define _GNU_SOURCE
+#define _ELF_HEADER
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -12,13 +12,17 @@
  */
 void printclass(char *head)
 {
-	printf("  %-35s", "Class:");
-	if (head[4] == 2)
-		printf("ELF64\n");
-	else if (head[4] == 1)
-		printf("ELF32\n");
-	else
-		printf("<unknown: %02hx>", head[4]);
+	 printf("  %-40s", "Class:");
+	 switch (head[4]) {
+		 case 2:
+			 printf("ELF64\n");
+			 break;
+		 case 1:
+			 printf("ELF32\n");
+			 break;
+		 default:
+			 printf("<invalid class: %02hx>", head[4]);
+	 }
 }
 
 /**
@@ -31,13 +35,17 @@ void printclass(char *head)
  */
 void printdata(char *head)
 {
-	printf("  %-35s", "Data:");
-	if (head[5] == 1)
-		printf("2's complement, little endian\n");
-	else if (head[5] == 2)
-		printf("2's complement, big endian\n");
-	else
-		printf("<unknown: %02hx>", head[5]);
+	printf("  %-40s", "Data:");
+	switch (head[5]) {
+		case 1:
+			printf("2's complement, little endian\n");
+			break;
+		case 2:
+			printf("2's complement, big endian\n");
+			break;
+		default:
+			printf("<invalid data: %02hx>", head[5]);
+	}
 }
 
 /**
@@ -49,7 +57,7 @@ void printdata(char *head)
  */
 void printversion(char *head)
 {
-	printf("  %-35s", "Version:");
+	printf("  %-40s", "Version:");
 	if (head[6] <= EV_CURRENT)
 	{
 		printf("%d", head[6]);
@@ -73,45 +81,90 @@ void printversion(char *head)
  */
 void printabi(char *head)
 {
-	printf("  %-35s", "OS/ABI:");
-	if (head[7] == 0)
-		printf("UNIX - System V\n");
-	else if (head[7] == 1)
-		printf("UNIX - HP-UX\n");
-	else if (head[7] == 2)
-		printf("UNIX - NetBSD\n");
-	else if (head[7] == 3)
-		printf("UNIX - Linux\n");
-	else if (head[7] == 4)
-		printf("UNIX - GNU Hurd\n");
-	else if (head[7] == 6)
-		printf("UNIX - Solaris\n");
-	else if (head[7] == 7)
-		printf("UNIX - AIX\n");
-	else if (head[7] == 8)
-		printf("UNIX - IRIX\n");
-	else if (head[7] == 9)
-		printf("UNIX - FreeBSD\n");
-	else if (head[7] == 10)
-		printf("UNIX - Tru64\n");
-	else if (head[7] == 11)
-		printf("UNIX - Novell Modesto\n");
-	else if (head[7] == 12)
-		printf("UNIX - OpenBSD\n");
-	else if (head[7] == 13)
-		printf("UNIX - Open VMS\n");
-	else if (head[7] == 14)
-		printf("UNIX - NonStop Kernel\n");
-	else if (head[7] == 15)
-		printf("UNIX - AROS\n");
-	else if (head[7] == 16)
-		printf("UNIX - Fenix OS\n");
-	else if (head[7] == 17)
-		printf("UNIX - CloudABI\n");
-	else
-		printf("<unknown: %02x>\n", head[7]);
-	printf("  %-35s%d\n", "ABI Version:", head[8]);
+	printf("  %-40s", "OS/ABI:");
+	switch (head[7])
+	{
+		case 0:
+			printf("UNIX - System V\n");
+			break;
+		case 1:
+			printf("UNIX - HP-UX\n");
+			break;
+		case 2:
+			printf("UNIX - NetBSD\n");
+			break;
+		case 3:
+			printf("UNIX - Linux\n");
+			break;
+		case 4:
+			printf("UNIX - GNU Hurd\n");
+			break;
+		case 6:
+			printf("UNIX - Solaris\n");
+			break;
+		case 7:
+			printf("UNIX - AIX\n");
+			break;
+		case 8:
+			printf("UNIX - IRIX\n");
+			break;
+		case 9:
+			printf("UNIX - FreeBSD\n");
+			break;
+		case 10:
+			printf("UNIX - Tru64\n");
+			break;
+		case 11:
+			printf("UNIX - Novell Modesto\n");
+			break;
+		case 12:
+			printf("UNIX - OpenBSD\n");
+			break;
+		case 13:
+			printf("UNIX - Open VMS\n");
+			break;
+		case 14:
+			printf("UNIX - NonStop Kernel\n");
+			break;
+		case 15:
+			printf("UNIX - AROS\n");
+			break;
+		case 16:
+			printf("UNIX - Fenix OS\n");
+			break;
+		case 17:
+			printf("UNIX - CloudABI\n");
+			break;
+		default:
+			printf("<unknown: %02x>\n", head[7]);
+			break;
+	}
+	printf("  %-40s%d\n", "ABI Version:", head[8]);
 }
+
+/**
+ * printabiversion - prints the ABI version
+ * from the elf header
+ *
+ * @head: header information
+ *
+ * Return: void
+ */
+void printabiversion(char *head)
+{
+        printf("  %-40s", "ABI Version:");
+        switch (head[8]) {
+                case 0:
+                        printf("0\n");
+                        break;
+                case 1:
+                        printf("1\n");
+                        break;
+                default:
+                        printf("<not specieifed: %02hx>", head[5]);
+        }
+}
+
 
 /**
  * printtype - prints elf filetype from header info
@@ -128,17 +181,23 @@ void printtype(char *head)
 		index = 16;
 	else
 		index = 17;
-	printf("  %-35s", "Type:");
-	if (head[index] == 1)
-		printf("REL (Relocatable file)\n");
-	else if (head[index] == 2)
-		printf("EXEC (Executable file)\n");
-	else if (head[index] == 3)
-		printf("DYN (Shared object file)\n");
-	else if (head[index] == 4)
-		printf("CORE (Core file)\n");
-	else
-		printf("<unknown>: %02x%02x\n", head[16], head[17]);
+	printf("  %-40s", "Type:");
+	case (head[index])
+	{
+		case 1:
+			printf("REL (Relocatable file)\n");
+			break;
+		case 2:
+			printf("EXEC (Executable file)\n");
+			break;
+		case 3:
+			printf("DYN (Shared object file)\n");
+			break;
+		case 4:
+			printf("CORE (Core file)\n");
+			break;
+		default:
+			printf("<unknown>: %02x%02x\n", head[16], head[17]);
 }
 
 /**
@@ -152,7 +211,7 @@ void printentry(char *head)
 {
 	int i, end;
 
-	printf("  %-35s0x", "Entry point address:");
+	printf("  %-40s0x", "Entry point address:");
 	if (head[4] == 2)
 		end = 0x1f;
 	else
@@ -221,6 +280,7 @@ int main(int ac, char *av[])
 	printdata(head);
 	printversion(head);
 	printabi(head);
+	printabiversion(head);
 	printtype(head);
 	printentry(head);
 	return (0);
