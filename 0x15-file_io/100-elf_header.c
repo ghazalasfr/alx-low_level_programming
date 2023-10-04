@@ -154,14 +154,8 @@ void printabi(char *head)
  */
 void printtype(char *head)
 {
-	int index;
-
-	if (head[9] == 1)
-		index = 16;
-	else
-		index = 17;
 	printf("  %-40s", "Type:");
-	switch (head[index])
+	switch (head[10])
 	{
 		case 1:
 			printf("REL (Relocatable file)\n");
