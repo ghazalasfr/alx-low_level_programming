@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/elf.h>
 
 
 /**
@@ -161,7 +162,7 @@ void printtype(char *head)
 	else
 		index = 17;
 	printf("  %-40s", "Type:");
-	case (head[index])
+	switch (head[index])
 	{
 		case 1:
 			printf("REL (Relocatable file)\n");
