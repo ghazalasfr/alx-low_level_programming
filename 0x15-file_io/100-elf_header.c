@@ -16,7 +16,7 @@
     printf(label ": " format "\n", value)
 
 void print_elf_header_info(Elf64_Ehdr *header) {
-    PRINT_FIELD("Magic", "%02x %02x %02x", header->e_ident[0], header->e_ident[1], header->e_ident[2]);
+    PRINT_FIELD("Magic", "%02x %02x %02x", header->e_ident[0]"," header->e_ident[1]"," header->e_ident[2]);
 
     char *class_str = "Invalid";
     if (header->e_ident[EI_CLASS] == ELFCLASS32) class_str = "ELF32";
