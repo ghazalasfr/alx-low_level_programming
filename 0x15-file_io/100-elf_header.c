@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
-//#include <elf.h>
+#include <elf.h>
 
 /**
  * printclass - prints the class from an elf header
