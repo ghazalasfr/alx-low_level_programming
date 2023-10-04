@@ -157,7 +157,7 @@ void printtype(char *head)
 {
 	int index;
 
-	if (head[5] == 1)
+	if (head[9] == 1)
 		index = 16;
 	else
 		index = 17;
