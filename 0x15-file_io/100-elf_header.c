@@ -61,10 +61,10 @@ void printdata(char *head)
 void printversion(char *head)
 {
 	printf("  %-40s", "Version:");
-	if (head[6] <= EV_CURRENT)
+	if (head[6] <= 1)
 	{
 		printf("%d", head[6]);
-		if (head[6] == EV_CURRENT)
+		if (head[6] == 1)
 			printf(" (current)\n");
 		else
 			printf("\n");
@@ -248,7 +248,7 @@ int main(int ac, char *av[])
 		return (1);
 	if (head[0] != 0x7f || head[1] != 'E' || head[2] != 'L' || head[3] != 'F')
 	{
-		dprintf(STDERR_FILENO,
+		wprintf(STDERR_FILENO,
 			"readelf: Error: hellofile: Failed to read file header\n");
 		return (98);
 	}
