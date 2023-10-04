@@ -13,7 +13,8 @@
 void printclass(char *head)
 {
 	 printf("  %-40s", "Class:");
-	 switch (head[4]) {
+	 switch (head[4])
+	 {
 		 case 2:
 			 printf("ELF64\n");
 			 break;
@@ -36,7 +37,8 @@ void printclass(char *head)
 void printdata(char *head)
 {
 	printf("  %-40s", "Data:");
-	switch (head[5]) {
+	switch (head[5])
+	{
 		case 1:
 			printf("2's complement, little endian\n");
 			break;
@@ -153,7 +155,8 @@ void printabi(char *head)
 void printabiversion(char *head)
 {
         printf("  %-40s", "ABI Version:");
-        switch (head[8]) {
+        switch (head[8])
+	{
                 case 0:
                         printf("0\n");
                         break;
@@ -198,6 +201,7 @@ void printtype(char *head)
 			break;
 		default:
 			printf("<unknown>: %02x%02x\n", head[16], head[17]);
+	}
 }
 
 /**
