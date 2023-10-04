@@ -4,7 +4,6 @@
 #include <fcntl.h>
 #include <elf.h>
 
-
 /**
  * printclass - prints the class from an elf header
  *
@@ -66,7 +65,7 @@ void printversion(char *head)
 	{
 		printf("%d", head[6]);
 		if (head[6] == 1)
-			printf(" (current)\n");
+			printf("1 (current)\n");
 		else
 			printf("\n");
 	}
