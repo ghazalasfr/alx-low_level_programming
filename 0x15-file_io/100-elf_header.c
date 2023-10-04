@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <elf.h>
+
 
 /**
  * printclass - prints the class from an elf header
@@ -146,31 +146,6 @@ void printabi(char *head)
 }
 
 /**
- * printabiversion - prints the ABI version
- * from the elf header
- *
- * @head: header information
- *
- * Return: void
- */
-void printabiversion(char *head)
-{
-        printf("  %-40s", "ABI Version:");
-        switch (head[8])
-	{
-                case 0:
-                        printf("0\n");
-                        break;
-                case 1:
-                        printf("1\n");
-                        break;
-                default:
-                        printf("<not specieifed: %02hx>", head[5]);
-        }
-}
-
-
-/**
  * printtype - prints elf filetype from header info
  *
  * @head: header information
@@ -285,7 +260,6 @@ int main(int ac, char *av[])
 	printdata(head);
 	printversion(head);
 	printabi(head);
-	printabiversion(head);
 	printtype(head);
 	printentry(head);
 	return (0);
